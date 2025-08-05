@@ -19,7 +19,7 @@
     "fuel_type": "Electric",
     "transmission": "Manual",
     "price": 20.0,
-    "status": "Available"
+    "status": "Rented"
   },
   {
     "id": 3,
@@ -30,6 +30,6 @@
     "fuel_type": "Hybrid",
     "transmission": "Automatic",
     "price": 20.0,
-    "status": "Available"
+    "status": "Rented"
   }
 ]

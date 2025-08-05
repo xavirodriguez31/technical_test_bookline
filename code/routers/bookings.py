@@ -11,7 +11,7 @@ router = APIRouter(prefix="/bookings", tags=["bookings"])
 async def create_booking_endpoint(booking: Booking):
     """Create a new booking"""
 
-    logger.info(f"/bookings/new_booking endpoint called. Car: {booking.car_id}, Customer: {booking.customer_id}")
+    logger.info(f"/bookings/new_booking endpoint called. Car: {booking.car_id}, Customer: {booking.customer_email}")
     try:
         created_booking = create_booking(booking)
         logger.info(f"Booking created successfully with ID: {created_booking.id}")

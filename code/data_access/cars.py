@@ -39,11 +39,17 @@ def create_car(car: Car) -> Car:
     """Create a new car"""
     logger.info(f"Creating new car.")
     
-    cars = _load_cars()
-    # Check the new ID
-    ids = [c.id for c in cars]
-    if car.id in ids:
-        raise ValueError(f"ID {car.id} already registered.")
+    cars = _load_cars() 
+    # Generate ID if not provided
+    if car.id is None:
+        car.id = max([c.id for c in cars], default=0) + 1
+        logger.info(f"Generated ID: {car.id}")
+    else:
+        # Check if ID already exists
+        existing_ids = [c.id for c in cars]
+        if car.id in existing_ids:
+            raise ValueError(f"ID {car.id} already registered.")
+    
     # Add to db
     cars.append(car)
     _save_cars(cars)

@@ -1,8 +1,7 @@
 from typing import List, Tuple
-from datetime import datetime, timedelta
+from datetime import date
 from ..models import Booking, BookingStatus, CarStatus
 from .cars import get_car, update_car_status
-from .customers import get_customer
 import logging
 from .utils import _load_file, _save_file
 
@@ -20,7 +19,7 @@ def _save_bookings(bookings: List[Booking]) -> None:
 
 def create_booking(booking: Booking) -> Booking:
     """Create a new booking with validations"""
-    logger.info(f"Creating booking for car {booking.car_id} and customer {booking.customer_id}.")
+    logger.info(f"Creating booking for car {booking.car_id} and customer {booking.customer_email}.")
     
     logger.info(f"Validating data.")
     # Validate if car exists
@@ -32,24 +31,31 @@ def create_booking(booking: Booking) -> Booking:
     if car.status != CarStatus.available or not is_car_available(booking.car_id, booking.start_date, booking.end_date):
         raise ValueError(f"Car with ID {booking.car_id} is not available for booking.")
     
-    # Validate if customer exists
-    customer = get_customer(booking.customer_id)
-    if not customer:
-        raise ValueError("Customer not found")
-    
     # Validate dates
     if booking.start_date >= booking.end_date:
         raise ValueError("Start date must be before end date.")
     
-    if booking.start_date < datetime.now():
+    if booking.start_date < date.today():
         raise ValueError("Start date cannot be in the past.")
+
+    # Set default status if not provided
+    if booking.status is None:
+        booking.status = BookingStatus.active
+        logger.info("Setting default status to Active")
 
     # Calculate the total days and price
     booking.total_days, booking.total_price = compute_days_price(booking, car)
     
     # Generate the new booking ID
     bookings = _load_bookings()
-    booking.id = max([b.id for b in bookings], default=0) + 1
+    if booking.id is None:
+        booking.id = max([b.id for b in bookings], default=0) + 1
+        logger.info(f"Generated booking ID: {booking.id}")
+    else:
+        # Check if ID already exists
+        existing_ids = [b.id for b in bookings]
+        if booking.id in existing_ids:
+            raise ValueError(f"Booking ID {booking.id} already registered.")
     
     # Add to db
     bookings.append(booking)
@@ -67,12 +73,12 @@ def compute_days_price(booking: Booking, car) -> Tuple[int, float]:
 
     # Minimum number of booking days is 1
     total_days = total_days if total_days > 0 else 1
-    total_price = car.day_price * total_days
+    total_price = car.price * total_days
 
     logger.info(f"Booking calculated: {total_days} days, {total_price}€.")
     return total_days, total_price
 
-def is_car_available(car_id: int, start_date: datetime, end_date: datetime) -> bool:
+def is_car_available(car_id: int, start_date: date, end_date: date) -> bool:
     """Check if a car is available for specific dates"""
     logger.info(f"Checking availability for car with ID: {car_id} from {start_date} to {end_date}.")
     
