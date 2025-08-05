@@ -2,7 +2,7 @@ import json
 import logging
 from pathlib import Path
 from typing import List
-from pydantinc import BaseModel
+from pydantic import BaseModel
 
 
 logger = logging.getLogger(__name__)
@@ -17,15 +17,17 @@ def _load_file(filename: str) -> list:
 
     path = DATA_DIR / filename
     if not path.exists():
-        logger.warning(f"Path: {path} does not exists.")
+        logger.warning(f"Path: {path} does not exist.")
         return []
 
     try:
         with path.open("r", encoding="utf-8") as f:
-            logger.info(f"Data from {filename} loaded.")
-            return json.load(f)
+            data = json.load(f)
+            logger.info(f"Data from {filename} loaded successfully.")
+            return data
     except Exception as e:
-        logger.error(f"Error loading data from {filename}. {e}")
+        logger.error(f"Error loading data from {filename}: {e}")
+        return []
 
 
 def _save_file(filename: str, data: list) -> None:
@@ -42,4 +44,4 @@ def _save_file(filename: str, data: list) -> None:
         logger.info(f"Data saved on {filename}.")
 
     except Exception as e:
-        logger.error(f"Error saving data on JSON. {e}")
+        logger.error(f"Error saving data on JSON: {e}")

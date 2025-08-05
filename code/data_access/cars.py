@@ -1,7 +1,7 @@
 from typing import List
 from ..models import Car, CarStatus
 import logging
-from utils import _load_file, _save_file
+from .utils import _load_file, _save_file
 
 logger = logging.getLogger(__name__)
 
@@ -39,10 +39,12 @@ def create_car(car: Car) -> Car:
     """Create a new car"""
     logger.info(f"Creating new car.")
     
-    # Generate the new ID
-    car.id = max([c.id for c in cars], default=0) + 1
-    # Add to db
     cars = _load_cars()
+    # Check the new ID
+    ids = [c.id for c in cars]
+    if car.id in ids:
+        raise ValueError(f"ID {car.id} already registered.")
+    # Add to db
     cars.append(car)
     _save_cars(cars)
     

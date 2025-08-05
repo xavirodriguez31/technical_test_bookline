@@ -1,10 +1,10 @@
 from typing import List, Tuple
 from datetime import datetime, timedelta
 from ..models import Booking, BookingStatus, CarStatus
-from cars import get_car, update_car_status
-from customers import get_customer
+from .cars import get_car, update_car_status
+from .customers import get_customer
 import logging
-from utils import _load_file, _save_file
+from .utils import _load_file, _save_file
 
 logger = logging.getLogger(__name__)
 
@@ -22,30 +22,26 @@ def create_booking(booking: Booking) -> Booking:
     """Create a new booking with validations"""
     logger.info(f"Creating booking for car {booking.car_id} and customer {booking.customer_id}.")
     
+    logger.info(f"Validating data.")
     # Validate if car exists
     car = get_car(booking.car_id)
     if not car:
-        logger.error(f"Car {booking.car_id} not found for booking")
-        raise ValueError("Car not found.")
+        raise ValueError(f"Car with ID {booking.car_id} not found.")
     
     # Validate if car is available
     if car.status != CarStatus.available or not is_car_available(booking.car_id, booking.start_date, booking.end_date):
-        logger.warning(f"Car {booking.car_id} is not available.")
-        raise ValueError("Car is not available for booking.")
+        raise ValueError(f"Car with ID {booking.car_id} is not available for booking.")
     
     # Validate if customer exists
     customer = get_customer(booking.customer_id)
     if not customer:
-        logger.error(f"Customer {booking.customer_id} not found.")
         raise ValueError("Customer not found")
     
     # Validate dates
     if booking.start_date >= booking.end_date:
-        logger.warning(f"Invalid booking dates.")
         raise ValueError("Start date must be before end date.")
     
     if booking.start_date < datetime.now():
-        logger.warning(f"Booking start date in the past.")
         raise ValueError("Start date cannot be in the past.")
 
     # Calculate the total days and price

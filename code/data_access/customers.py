@@ -1,7 +1,7 @@
 from typing import List
 from ..models import Customer
 import logging
-from utils import _load_file, _save_file
+from .utils import _load_file, _save_file
 
 logger = logging.getLogger(__name__)
 
