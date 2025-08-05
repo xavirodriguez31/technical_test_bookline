@@ -19,7 +19,7 @@
     "fuel_type": "Electric",
     "transmission": "Manual",
     "price": 20.0,
-    "status": "Rented"
+    "status": "Available"
   },
   {
     "id": 3,
@@ -31,5 +31,16 @@
     "transmission": "Automatic",
     "price": 20.0,
     "status": "Rented"
+  },
+  {
+    "id": 4,
+    "brand": "Tesla",
+    "model": "Model_3",
+    "year": 1990,
+    "license_plate": "4444GGG",
+    "fuel_type": "Gasoline",
+    "transmission": "Manual",
+    "price": 10.0,
+    "status": "Available"
   }
 ]

@@ -1,21 +1,11 @@
 [
   {
-    "id": 1,
-    "car_id": 2,
-    "customer_email": "string",
-    "start_date": "2025-08-06",
-    "end_date": "2025-08-08",
-    "total_days": 2.0,
-    "total_price": 40.0,
-    "status": "Active"
-  },
-  {
     "id": 2,
     "car_id": 3,
     "customer_email": "string",
     "start_date": "2025-08-06",
     "end_date": "2025-08-08",
-    "total_days": 2,
+    "total_days": 2.0,
     "total_price": 40.0,
     "status": "Active"
   }

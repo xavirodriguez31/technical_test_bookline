@@ -67,6 +67,37 @@ def create_booking(booking: Booking) -> Booking:
     logger.info(f"Booking created successfully with ID: {booking.id}.")
     return booking
 
+def delete_booking(booking_id: int) -> bool:
+    """Delete a booking and update car status to available"""
+    logger.info(f"Deleting booking with ID: {booking_id}")
+    
+    bookings = _load_bookings()
+    booking_to_delete = None
+    
+    # Find the booking to delete
+    for booking in bookings:
+        if booking.id == booking_id:
+            booking_to_delete = booking
+            break
+    
+    if not booking_to_delete:
+        logger.warning(f"Booking with ID {booking_id} not found.")
+        return False
+    
+    # Check if booking is active
+    if booking_to_delete.status == BookingStatus.active:
+        # Update car status to available
+        car_id = booking_to_delete.car_id
+        update_car_status(car_id, CarStatus.available)
+        logger.info(f"Updated car {car_id} status to Available.")
+    
+    # Remove booking from list
+    bookings = [b for b in bookings if b.id != booking_id]
+    _save_bookings(bookings)
+    
+    logger.info(f"Booking {booking_id} deleted successfully.")
+    return True
+
 def compute_days_price(booking: Booking, car) -> Tuple[int, float]:
     """Calculate the total number of days and price for the booking"""
     total_days = (booking.end_date - booking.start_date).days
