@@ -110,13 +110,13 @@ class TestBookingsDataAccess:
         """Computing days and price for booking"""
         # Create a car
         car = Car(
-            brand="Sample",
-            model="Sample_Model",
+            brand="Toyota",
+            model="Model_5",
             year=2020,
-            license_plate="1234KKK",
+            license_plate="1234YYY",
             fuel_type="Gasoline",
             transmission="Automatic",
-            price=30.0
+            price=50.0
         )
         
         # Create booking
@@ -129,7 +129,7 @@ class TestBookingsDataAccess:
         
         total_days, total_price = compute_days_price(booking, car)
         assert total_days == 2
-        assert total_price == 60.0
+        assert total_price == 100.0
     
     def test_car_available(self, temp_data_dir):
         """Car availability"""
@@ -144,10 +144,10 @@ class TestBookingsDataAccess:
         """Create booking with default status when not provided"""
         # Create a car
         car = Car(
-            brand="Test Brand",
-            model="Test Model",
+            brand="Toyota",
+            model="Model_5",
             year=2020,
-            license_plate="TEST123",
+            license_plate="1234YYY",
             fuel_type="Gasoline",
             transmission="Automatic",
             price=50.0
@@ -169,10 +169,10 @@ class TestBookingsDataAccess:
         """Deleting booking updates car status"""
         # Create a car
         car = Car(
-            brand="Test Brand",
-            model="Test Model",
+            brand="Toyota",
+            model="Model_5",
             year=2020,
-            license_plate="TEST123",
+            license_plate="1234YYY",
             fuel_type="Gasoline",
             transmission="Automatic",
             price=50.0
