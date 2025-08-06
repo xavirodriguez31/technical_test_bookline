@@ -32,8 +32,8 @@ class BookingStatus(str, Enum):
 
 class Car(BaseModel):
     id: Optional[int] = Field(None, description="Car ID, unique")
-    brand: str = Field(..., max_length=50, description="Brand of the car")
-    model: str = Field(..., max_length=50, description="Model of the car")
+    brand: str = Field(..., min_length=1, max_length=50, description="Brand of the car")
+    model: str = Field(..., min_length=1, max_length=50, description="Model of the car")
     year: int = Field(..., ge=1800, le=2050, description="Year of the car")
     license_plate: str = Field(..., min_length=5, max_length=10, description="License Plate of the car")
     fuel_type: Fuel = Field(..., description="Fuel type of the car")
@@ -47,7 +47,7 @@ class Car(BaseModel):
 class Booking(BaseModel):
     id: Optional[int] = Field(None, description="Booking ID, unique")
     car_id: int = Field(..., description="Rented Car ID")
-    customer_email: str = Field(..., description="Customer email")
+    customer_email: str = Field(..., min_length=1, description="Customer email")
     start_date: date = Field(..., description="Start date of the booking")
     end_date: date = Field(..., description="End date of the booking")
     total_days: Optional[float] = Field(None, gt=0, description="Total booking days")
