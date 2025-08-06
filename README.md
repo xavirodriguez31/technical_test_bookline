@@ -125,12 +125,12 @@ docker run -d --name car-api -p 8000:8000 car-rental-service-api:latest
 
 Open the browser and copy: http://localhost:8000/docs.
 
-1. **View the logs**
+4. **View the logs**
 ```bash
 docker logs -f car-api
 ```
 
-1. **Stop**
+5. **Stop**
 ```bash
 docker stop car-api
 ```
